@@ -8,3 +8,4 @@
 
 export { errorMiddleware } from './error';
 export { notFoundMiddleware } from './notFound';
+export { uploadMiddleware } from './upload';

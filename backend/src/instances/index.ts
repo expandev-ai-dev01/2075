@@ -10,3 +10,8 @@
  * InitExample instances
  */
 export { initExampleStore, type InitExampleRecord } from './initExample';
+
+/**
+ * ImageUpload instances
+ */
+export { imageUploadStore, type ImageUploadRecord } from './imageUpload';

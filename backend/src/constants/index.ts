@@ -18,3 +18,15 @@ export {
   type InitExampleLimitsType,
   type InitExamplePriority,
 } from './initExample';
+
+/**
+ * ImageUpload constants
+ */
+export {
+  IMAGE_UPLOAD_LIMITS,
+  IMAGE_UPLOAD_MIME_TYPES,
+  IMAGE_UPLOAD_STATUS,
+  type ImageUploadLimitsType,
+  type ImageUploadMimeTypesType,
+  type ImageUploadStatusType,
+} from './imageUpload';
