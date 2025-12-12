@@ -1,12 +1,12 @@
 /**
  * @summary
  * Visual feedback component for upload progress.
- * Displays status, progress bar, and messages.
+ * Displays status, progress bar, and messages including validation state.
  *
  * @module domain/imageUpload/components/UploadProgress/main
  */
 
-import { CheckCircle2, Loader2, AlertCircle, Clock } from 'lucide-react';
+import { CheckCircle2, Loader2, AlertCircle, Clock, Shield } from 'lucide-react';
 import { Progress } from '@/core/components/progress';
 import { Card, CardContent } from '@/core/components/card';
 import { Badge } from '@/core/components/badge';
@@ -27,6 +27,14 @@ function UploadProgress({ status, progress, fileName, className }: UploadProgres
           message: 'Aguardando seleção de arquivo...',
           variant: 'secondary' as const,
           showProgress: false,
+        };
+      case 'validando':
+        return {
+          icon: <Shield className="size-5" />,
+          label: 'Validando',
+          message: 'Validando arquivo...',
+          variant: 'default' as const,
+          showProgress: true,
         };
       case 'processando':
         return {
@@ -67,6 +75,7 @@ function UploadProgress({ status, progress, fileName, className }: UploadProgres
                 'size-10 flex items-center justify-center rounded-full',
                 status === 'concluído' && 'bg-green-100 text-green-600 dark:bg-green-900/30',
                 status === 'processando' && 'bg-blue-100 text-blue-600 dark:bg-blue-900/30',
+                status === 'validando' && 'bg-purple-100 text-purple-600 dark:bg-purple-900/30',
                 status === 'erro' && 'bg-red-100 text-red-600 dark:bg-red-900/30',
                 status === 'aguardando' && 'bg-muted text-muted-foreground'
               )}
@@ -96,7 +105,8 @@ function UploadProgress({ status, progress, fileName, className }: UploadProgres
             className={cn(
               'h-2',
               status === 'concluído' && '[&>div]:bg-green-600',
-              status === 'processando' && '[&>div]:bg-blue-600'
+              status === 'processando' && '[&>div]:bg-blue-600',
+              status === 'validando' && '[&>div]:bg-purple-600'
             )}
           />
         )}

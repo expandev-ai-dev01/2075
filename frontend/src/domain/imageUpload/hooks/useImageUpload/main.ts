@@ -1,7 +1,7 @@
 /**
  * @summary
  * Custom hook for managing image upload functionality.
- * Handles upload state, progress tracking, and session management.
+ * Handles upload state, progress tracking, validation, and session management.
  *
  * @module domain/imageUpload/hooks/useImageUpload/main
  */
@@ -10,12 +10,12 @@ import { useState, useCallback } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import * as imageUploadService from '../../services/imageUploadService';
-import type { UploadStatus } from '../../types/models';
+import type { UploadStatus, ValidationState } from '../../types/models';
 import type { UseImageUploadReturn } from './types';
 
 /**
  * Hook for managing image upload operations.
- * Provides upload functionality with progress tracking and error handling.
+ * Provides upload functionality with progress tracking, validation, and error handling.
  *
  * @returns Upload state and control functions
  */
@@ -24,6 +24,11 @@ export const useImageUpload = (): UseImageUploadReturn => {
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>('aguardando');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [sessionId, setSessionId] = useState<string>();
+  const [validationState, setValidationState] = useState<ValidationState>({
+    isValidating: false,
+    isValid: false,
+    errors: [],
+  });
 
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
@@ -66,6 +71,11 @@ export const useImageUpload = (): UseImageUploadReturn => {
       setUploadStatus('aguardando');
       setUploadProgress(0);
       setSessionId(data.sessionId);
+      setValidationState({
+        isValidating: false,
+        isValid: false,
+        errors: [],
+      });
       uploadMutation.reset();
       queryClient.invalidateQueries({ queryKey: ['imageUpload'] });
       toast.success('Sessão reiniciada', {
@@ -101,5 +111,6 @@ export const useImageUpload = (): UseImageUploadReturn => {
     error: uploadMutation.error?.message,
     isUploading: uploadMutation.isPending,
     canUpload,
+    validationState,
   };
 };

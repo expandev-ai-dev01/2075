@@ -30,3 +30,17 @@ export {
   type ImageUploadMimeTypesType,
   type ImageUploadStatusType,
 } from './imageUpload';
+
+/**
+ * ImageValidation constants
+ */
+export {
+  IMAGE_VALIDATION_LIMITS,
+  IMAGE_VALIDATION_EXTENSIONS,
+  IMAGE_VALIDATION_SIGNATURES,
+  IMAGE_VALIDATION_ERROR_CODES,
+  type ImageValidationLimitsType,
+  type ImageValidationExtensionsType,
+  type ImageValidationSignaturesType,
+  type ImageValidationErrorCodesType,
+} from './imageValidation';

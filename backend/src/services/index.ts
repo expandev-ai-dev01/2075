@@ -8,3 +8,4 @@
 
 export * from './initExample';
 export * from './imageUpload';
+export * from './imageValidation';

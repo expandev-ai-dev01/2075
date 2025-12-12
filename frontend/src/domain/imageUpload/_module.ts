@@ -10,8 +10,11 @@ export * from './components';
 export * from './hooks';
 export * from './services';
 export * from './validations';
+export * from './utils';
 export type {
   ImageUpload,
   ImageUploadSession,
   UploadStatus as ImageUploadStatusType,
+  ValidationError,
+  ValidationState,
 } from './types';

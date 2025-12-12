@@ -5,7 +5,7 @@
  * @module domain/imageUpload/hooks/useImageUpload/types
  */
 
-import type { ImageUpload, UploadStatus } from '../../types/models';
+import type { ImageUpload, UploadStatus, ValidationState } from '../../types/models';
 
 export interface UseImageUploadReturn {
   uploadImage: (file: File) => Promise<void>;
@@ -16,4 +16,5 @@ export interface UseImageUploadReturn {
   error?: string;
   isUploading: boolean;
   canUpload: boolean;
+  validationState: ValidationState;
 }

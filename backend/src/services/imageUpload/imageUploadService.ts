@@ -10,17 +10,13 @@ import { Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { imageUploadStore } from '@/instances';
 import { ServiceError } from '@/utils';
+import { validateImageFile } from '@/services/imageValidation';
 import {
   ImageUploadCreateResponse,
   ImageUploadSessionResponse,
   ImageUploadResetResponse,
 } from './imageUploadTypes';
-import {
-  sessionParamsSchema,
-  validateMimeType,
-  validateFileSize,
-  validateFileSignature,
-} from './imageUploadValidation';
+import { sessionParamsSchema } from './imageUploadValidation';
 
 /**
  * @summary
@@ -53,19 +49,30 @@ export async function imageUploadCreate(req: Request): Promise<ImageUploadCreate
   const { originalname, mimetype, size, buffer } = req.file;
 
   /**
-   * @rule {VA-001} Validate MIME type
+   * @rule {BR-020} Execute validations in order: size, extension, format, integrity
+   * @rule {BR-021} Stop at first validation error
+   * @integration Integrate with ImageValidation service
    */
-  validateMimeType(mimetype);
+  const validationResult = await validateImageFile({
+    fileName: originalname,
+    fileSize: size,
+    mimeType: mimetype,
+    fileBuffer: buffer,
+  });
 
   /**
-   * @rule {VA-002} Validate file size
+   * @validation Check if file passed all validations
+   * @throws {ServiceError} Validation error from ImageValidation service
+   * @rule {BR-022} Allow upload only if all validations pass
    */
-  validateFileSize(size);
-
-  /**
-   * @rule {SE-004} Validate file signature (magic bytes)
-   */
-  validateFileSignature(buffer);
+  if (!validationResult.isValid) {
+    throw new ServiceError(
+      validationResult.errorCode || 'VALIDATION_ERROR',
+      validationResult.errorMessage || 'Falha na validação do arquivo',
+      400,
+      validationResult.details
+    );
+  }
 
   /**
    * @rule {BR-001} Check if session already has a file
